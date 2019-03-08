@@ -70,29 +70,33 @@ class TarsManage
 
     public function keepAlive($masterPid)
     {
-        $adapter = $this->tarsName.'.objAdapter';
-        $application = $this->appName;
-        $serverName = $this->serverName;
+        if( $masterPid<1 ){
+            return;
+        }else{
+            $adapter = $this->tarsName.'.objAdapter';
+            $application = $this->appName;
+            $serverName = $this->serverName;
 
-        $nodeInfo = $this->getNodeInfo();
-        if( empty($nodeInfo) ){
-            var_dump('keepAlive getNodeInfo fail');
-            return null;
+            $nodeInfo = $this->getNodeInfo();
+            if( empty($nodeInfo) ){
+                var_dump('keepAlive getNodeInfo fail');
+                return null;
+            }
+            $host = $nodeInfo['host'];
+            $port = $nodeInfo['port'];
+            $objName = $nodeInfo['objName'];
+
+            $serverInfo = new ServerInfo();
+            $serverInfo->adapter = $adapter;
+            $serverInfo->application = $application;
+            $serverInfo->serverName = $serverName;
+            $serverInfo->pid = $masterPid;
+
+            $serverF = new ServerFSync($host, $port, $objName);
+            $serverF->keepAlive($serverInfo);
+
+            var_dump(' keepalive ');
         }
-        $host = $nodeInfo['host'];
-        $port = $nodeInfo['port'];
-        $objName = $nodeInfo['objName'];
-
-        $serverInfo = new ServerInfo();
-        $serverInfo->adapter = $adapter;
-        $serverInfo->application = $application;
-        $serverInfo->serverName = $serverName;
-        $serverInfo->pid = $masterPid;
-
-        $serverF = new ServerFSync($host, $port, $objName);
-        $serverF->keepAlive($serverInfo);
-
-        var_dump(' keepalive ');
     }
 
     //判断 worker和master 是否存在，存在则返回masterpid ,不存在返回0 tars会重启服务
