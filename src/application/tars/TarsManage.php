@@ -95,6 +95,13 @@ class TarsManage
             $serverF = new ServerFSync($host, $port, $objName);
             $serverF->keepAlive($serverInfo);
 
+            $adminServerInfo = new ServerInfo();
+            $adminServerInfo->adapter = 'AdminAdapter';
+            $adminServerInfo->application = $application;
+            $adminServerInfo->serverName = $serverName;
+            $adminServerInfo->pid = $masterPid;
+            $serverF->keepAlive($adminServerInfo);
+
             var_dump(' keepalive ');
         }
     }
