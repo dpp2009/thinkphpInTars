@@ -15,7 +15,8 @@ $arg_cmd = $args[2]=='start' ? ' swoole start -d' : ' swoole '.$args[2] ;
 $cmd = "/usr/bin/php  " . $swoft_bin . $arg_cmd;
 //var_dump($cmd);
 
-exec($cmd, $output, $r);
+//exec($cmd, $output, $r);  可能defunct
+system($cmd, $r);
 
 
 
